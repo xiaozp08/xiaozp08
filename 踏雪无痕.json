@@ -14,16 +14,7 @@
         }
     ],
     "sites": [
-        {
-            "key": "dr_豆瓣",
-            "name": "🌈 xiao TV",
-            "type": 3,
-            "api": "http://8.210.232.168/ys/dr_py/libs/drpy2.min.js",
-            "searchable": 2,
-            "quickSearch": 0,
-            "filterable": 0,
-            "ext": "http://8.210.232.168/tv/box/js/douban.js"
-        },
+            {"key":"csp_DouDou","name":"🌈 xiao TV","type":3,"api":"csp_DouDou","searchable":0,"quickSearch":0,"filterable":1},
         {"key":"csp_Kunyu77",
 "name":"🌈 xiao TV",
 "type":3,
