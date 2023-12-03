@@ -14,7 +14,14 @@
         }
     ],
     "sites": [
-        {"key":"csp_DouDou","name":"🔍豆瓣┃本接口免费-🈲贩卖","type":3,"api":"csp_DouDou","searchable":0,"quickSearch":0,"filterable":1},    {"key":"csp_DouDou","name":"🌈 xiao TV","type":3,"api":"csp_DouDou","searchable":0,"quickSearch":0,"filterable":1},
+             {
+            "key": "南瓜",
+            "name": "🎃 南瓜影视",
+            "type": 3,
+            "api": "http://8.210.232.168/ys/dr_py/libs/drpy2.min.js",
+            "ext": "http://8.210.232.168/ys/dr_py/js/%E5%8D%97%E7%93%9C.js"
+        },
+     {"key":"csp_DouDou","name":"🌈 xiao TV","type":3,"api":"csp_DouDou","searchable":0,"quickSearch":0,"filterable":1},
         {"key":"csp_Kunyu77",
 "name":"🌈 xiao TV",
 "type":3,
