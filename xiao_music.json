@@ -1,6 +1,6 @@
-{"plugins":[{"name":"酷狗","url":"https://gitlab.com/xiaozp08/xiaoTV/-/raw/main/酷狗音乐.js","version":"0.1.5"},
+{"plugins":[{"name":"网易云","url":"https://gitlab.com/xiaozp08/xiaoTV/-/raw/main/网易云音乐.js","version":"0.2.2"},
 {"name":"QQ音乐","url":"https://gitlab.com/xiaozp08/xiaoTV/-/raw/main/qq.js","version":"0.2.2"},
 {"name":"酷我","url":"https://gitlab.com/xiaozp08/xiaoTV/-/raw/main/酷我音乐.js","version":"0.1.7"},
 {"name":"喜马拉雅","url":"https://gitlab.com/xiaozp08/xiaoTV/-/raw/main/喜马拉雅.js","version":"0.1.6"},
-{"name":"网易云","url":"https://gitlab.com/xiaozp08/xiaoTV/-/raw/main/网易云音乐.js","version":"0.2.2"},
+{"name":"酷狗","url":"https://gitlab.com/xiaozp08/xiaoTV/-/raw/main/酷狗音乐.js","version":"0.1.5"},
 {"name":"千千音乐","url":"https://gitlab.com/xiaozp08/xiaoTV/-/raw/main/千千音乐.js","version":"0.1.3"}]}
