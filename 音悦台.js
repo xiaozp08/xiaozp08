@@ -504,7 +504,7 @@ module.exports = {
     version: "0.1.14",
     appVersion: ">0.1.0-alpha.0",
     order: 19,
-    // srcUrl: "https://agit.ai/vale_gtt/MSC_API/raw/branch/master/my_plugins/third_party/my_2t58.js",
+    // srcUrl: "https://gitlab.com/xiaozp08/xiaoTV/-/raw/main/音悦台.js",
     cacheControl: "no-cache",
     hints: {
         importMusicSheet: [],
