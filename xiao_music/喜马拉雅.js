@@ -1,4 +1,4 @@
-"use strict";
+7"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = require("axios");
 const dayjs = require("dayjs");
@@ -160,7 +160,7 @@ async function getArtistWorks(artistItem, page, type) {
     }
 }
 module.exports = {
-    platform: "喜马拉雅听书",
+    platform: "喜马拉雅",
     author: '猫头猫',
     version: "0.1.6",
     supportedSearchType: ["music", "album", "artist"],
