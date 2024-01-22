@@ -293,7 +293,7 @@ async function getMediaSource(musicItem, quality) {
 }
 
 module.exports = {
-    platform: "听书_ting13",
+    platform: "有声小说",
     version: "0.1.0",
     appVersion: ">0.1.0-alpha.0",
     cacheControl: "no-cache",
