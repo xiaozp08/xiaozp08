@@ -83,7 +83,7 @@ function formatAlbumItem(_) {
     };
 }
 function musicCanPlayFilter(_) {
-    // 不再检查费用或特权状态，直接返回true以允许所有歌曲
+    // ä¸å†æ£€æŸ¥è´¹ç”¨æˆ–ç‰¹æƒçŠ¶æ€ï¼Œç›´æŽ¥è¿”å›žtrueä»¥å…è®¸æ‰€æœ‰æ­Œæ›²
     return true;
 }
 const pageSize = 30;
@@ -291,9 +291,9 @@ async function getValidMusicItems(trackIds) {
         "Content-Type": "application/x-www-form-urlencoded",
     };
     try {
-        // 获取歌曲详情数据
+        // èŽ·å–æ­Œæ›²è¯¦æƒ…æ•°æ®
         const res = (await axios_1.default.get(`https://music.163.com/api/song/detail/?ids=[${trackIds.join(",")}]`, { headers })).data;
-        // 直接格式化歌曲项，不检查 URL
+        // ç›´æŽ¥æ ¼å¼åŒ–æ­Œæ›²é¡¹ï¼Œä¸æ£€æŸ¥ URL
         const validMusicItems = res.songs.map(formatMusicItem);
         return validMusicItems;
     }
@@ -439,7 +439,7 @@ async function getRecommendSheetTags() {
 async function getRecommendSheetsByTag(tag, page) {
     const pageSize = 20;
     const data = {
-        cat: tag.id || "全部",
+        cat: tag.id || "å…¨éƒ¨",
         order: "hot",
         limit: pageSize,
         offset: (page - 1) * pageSize,
@@ -496,18 +496,17 @@ async function getMusicSheetInfo(sheet, page) {
     return Object.assign({ isEnd: trackIds.length <= page * pageSize, musicList: res }, extra);
 }
 module.exports = {
-    platform: "简繁音乐",
-    author: '是青旨啊',
+    platform: "网易云音乐",
+    author: 'xiao',
     version: "0.0.5",
     appVersion: ">0.1.0-alpha.0",
-    srcUrl: "https://csm.sayqz.com/js/app/app.js",
+    srcUrl: "https://gitlab.com/xiaozp08/xiaoTV/-/raw/main/xiao_music/wyy_.js",
     cacheControl: "no-store",
     hints: {
-        importMusicSheet: [
-            "网易云：APP点击分享，然后复制链接",
+        importMusicSheet: ["网易云移动端：APP点击分享，然后复制链接",
+            "网易云H5/PC端：复制URL，或者直接输入歌单ID即可",
             "默认歌单无法导入，先新建一个空白歌单复制过去再导入新歌单即可",
-            "By_简繁音乐",
-        ],
+            "导入过程中会过滤掉所有VIP/试听/收费音乐，导入时间和歌单大小有关，请耐心等待",   ],
     },
     supportedSearchType: ["music", "album", "sheet", "artist", "lyric"],
     async search(query, page, type) {
