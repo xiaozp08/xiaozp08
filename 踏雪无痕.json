@@ -1,5 +1,5 @@
 {
-    "spider": "https://gitlab.com/xiaozp08/xiaoTV/-/raw/main/Yoursmile.jar?ref_type=heads&inline=false",
+    "spider": "https://d.kstore.space/download/6372/xiaoTV/Yoursmile.jar",
     "lives": [
         {
             "group": "redirect",
@@ -7,7 +7,7 @@
                 {
                     "name": "live",
                     "urls": [
-                        "proxy://do=live&type=txt&ext=aHR0cHM6Ly9naXRsYWIuY29tL3hpYW96cDA4L3hpYW9UVi8tL3Jhdy9tYWluL2xpdmUudHh0P3JlZl90eXBlPWhlYWRz"
+                        "proxy://do=live&type=txt&ext=aHR0cHM6Ly9kLmtzdG9yZS5zcGFjZS9kb3dubG9hZC82MzcyL3hpYW9UVi9saXZlLnR4dA"
                     ]
                 }
             ]
@@ -28,33 +28,7 @@
           "searchable":1,
           "quickSearch":1,
           "filterable":1},
-        {
-            "key": "骑骑影院",
-            "name": "🚵┃骑骑┃影院",
-            "type": 3,
-            "playerType": 2,
-            "api": "csp_AppYsV2",
-            "searchable": 1,
-            "quickSearch": 1,
-            "filterable": 1,
-            "ext": "https://www.gsjtlxy.top/xgapp.php/v3/"
-        },
-        {
-      "key": "迷你库",
-      "name": "米粒🔐APP",
-      "type": 3,
-      "api": "csp_AppYsV2",
-      "searchable": 1,
-      "changeable": 1,
-      "ext": "http://www.miniku.cc/xgapp.php/v1/"
-        },
-        {
-            "key": "南瓜",
-            "name": "🎃 南瓜影视",
-            "type": 3,
-            "api": "http://8.210.232.168/ys/dr_py/libs/drpy2.min.js",
-            "ext": "http://8.210.232.168/ys/dr_py/js/%E5%8D%97%E7%93%9C.js"
-        },
+        {"key":"csp_NanGua","name":"🎃南瓜","type":3,"api":"csp_NanGua","searchable":1,"quickSearch":1,"filterable":1,"changeable":1},
         {
             "key": "畅梦",
             "name": "💤┃畅梦┃影视",
@@ -97,13 +71,6 @@
       ]
     },
         {
-            "key": "apv2_瑞丰",
-            "name": "⛄ 瑞丰影视",
-            "type": 3,
-            "api": "csp_AppYsV2",
-            "ext": "http://www.miniku.cc/xgapp.php/v2/"
-        },
-        {
       "key": "索尼采集",
       "name": "🥤索尼影视",
       "type": 1,
@@ -143,25 +110,6 @@
             "jar": "http://cdn.qiaoji8.com/fix0804.jar;md5;f71431362b88ce020d9854eb9166841b"
         },
         {
-            "key": "drpy_蚂蚁",
-            "name": "🔥蚂蚁影视",
-            "type": 3,
-            "searchable": 1,
-            "changeable": 1,
-            "playerType": 1,
-            "api": "https://agit.ai/qi169/kankan/raw/branch/master/drpy2.min.js",
-            "ext": "https://agit.ai/qi169/kankan/raw/branch/master/js/蚂蚁.js"
-        },
-        {
-            "key": "csp_简影",
-            "name": "🎽剪影",
-            "type": 1,
-            "api": "https://www.xy1080.net/api.php/provide/vod/from/jiguang",
-            "searchable": 1,
-            "quickSearch": 1,
-            "filterable": 1
-        },
-        {
             "key": "cjzy_快看",
             "name": "🚀快看影视",
             "type": 1,
@@ -188,48 +136,6 @@
                 "惊悚片",
                 "冒险片"
             ]
-        },
-        {
-            "key": "搜狐资源",
-            "name": "🦊搜狐影视",
-            "type": 1,
-            "api": "http://playersll.gaoxin155.com.cn/api.php/provide/vod/from/sohu/?at/xml/",
-            "playUrl": "https://jx.xmflv.com/?url=",
-            "searchable": 1,
-            "quickSearch": 1,
-            "filterable": 1,
-            "categories": [
-                "国产剧",
-                "韩国剧",
-                "香港剧",
-                "台湾剧",
-                "欧美剧",
-                "动作片",
-                "科幻片",
-                "战争片",
-                "奇幻片",
-                "喜剧片",
-                "爱情片",
-                "恐怖片",
-                "犯罪片",
-                "悬疑片",
-                "惊悚片",
-                "剧情片",
-                "冒险片",
-                "记录片",
-                "综艺",
-                "动漫"
-            ]
-        },
-        {
-            "key": "蚂蚁视频",
-            "name": "🏮蚂蚁视频",
-            "type": 3,
-            "api": "csp_Mayiys",
-            "searchable": 1,
-            "quickSearch": 1,
-            "filterable": 0,
-            "ext": "http://rzys.xyz"
         },
         {
             "key": "csp_非凡资源",
