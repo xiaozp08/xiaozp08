@@ -21,7 +21,7 @@ CCTV9 纪录,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225734/index
 CCTV9 纪录,http://39.134.24.166/dbiptv.sn.chinamobile.com/PLTV/88888890/224/3221226197/index.m3u8
 CCTV10 科教,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225730/index.m3u8
 CCTV11 戏曲,https://live.goodiptv.club/api/cqyx.php?id=cctv11HD
-CCTV11 戏曲,http://120.196.232.124:8088/rrs03.hw.gmcc.net/PLTV/651/224/3221226714/1.m3u8?
+CCTV11 戏曲,http://39.134.67.110/PLTV/88888888/224/3221225517/index.m3u8
 CCTV11 戏曲,http://cyz32.livehbindex.hbcatv.cn/live/5000002086444f0886ad7032ad8f756b.m3u8?bitrate=2300&pt=5 
 CCTV12 社会与法,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225731/index.m3u8
 CCTV13 新闻,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226537/index.m3u8
@@ -32,6 +32,13 @@ CCTV15,http://39.134.24.162/dbiptv.sn.chinamobile.com/PLTV/88888888/224/32212257
 CCTV16 奥林匹克,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226100/index.m3u8
 CCTV16 奥林匹克,http://39.134.24.166/dbiptv.sn.chinamobile.com/PLTV/88888890/224/3221226921/index.m3u8
 CCTV17 农业农村,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225765/index.m3u8
+江西都市,http://39.134.115.191:8080/ysten.jx.chinamobile.com/PLTV/88888888/224/3221225584/2/index.m3u8?fmt=ts2hls
+江西经济生活,http://39.134.115.191:8080/ysten.jx.chinamobile.com/PLTV/88888888/224/3221225580/2/index.m3u8?fmt=ts2hls
+江西影旅游,http://39.134.115.191:8080/ysten.jx.chinamobile.com/PLTV/88888888/224/3221225579/2/index.m3u8?fmt=ts2hls
+江西公共农业,http://39.134.115.191:8080/ysten.jx.chinamobile.com/PLTV/88888888/224/3221225578/2/index.m3u8?fmt=ts2hls
+江西少儿家庭,http://39.134.115.191:8080/ysten.jx.chinamobile.com/PLTV/88888888/224/3221225577/2/index.m3u8?fmt=ts2hls
+江西新闻,http://39.134.115.191:8080/ysten.jx.chinamobile.com/PLTV/88888888/224/3221225576/2/index.m3u8?fmt=ts2hls
+江西教育,http://39.134.115.191:8080/ysten.jx.chinamobile.com/PLTV/88888888/224/3221226197/2/index.m3u8?fmt=ts2hls
 北京卫视,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225728/index.m3u8
 北京卫视,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226450/index.m3u8
 北京卫视,http://39.134.24.166/dbiptv.sn.chinamobile.com/PLTV/88888890/224/3221226222/index.m3u8
@@ -88,12 +95,6 @@ CCTV17 农业农村,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/322122576
 内蒙古卫视,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226389/index.m3u8
 黑龙江卫视,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226327/index.m3u8
 绍兴影视,http://live.shaoxing.com.cn/video/s10001-sxtv3/index.m3u8
-	江西都市频道,rtsp://118.212.169.207:554/PLTV/88888888/224/3221227290/10000100000000060000000001722654_0.smil
-江西经济生活,rtsp://118.212.169.207:554/PLTV/88888888/224/3221227092/10000100000000060000000000610996_0.smil
-江西影视旅游,rtsp://118.212.169.207:554/PLTV/88888888/224/3221227287/10000100000000060000000001899760_0.smil
-江西公共农业,rtsp://118.212.169.207:554/PLTV/88888888/224/3221226948/10000100000000060000000000527279_0.smil
-江西少儿,rtsp://118.212.169.207:554/PLTV/88888888/224/3221227089/10000100000000060000000000582672_0.smil
-江西新闻,rtsp://118.212.169.207:554/PLTV/88888888/224/3221227051/10000100000000060000000000571126_0.smil
-江西移动,rtsp://118.212.169.207:554/PLTV/88888888/224/3221227285/10000100000000060000000001842697_0.smil
-风尚购物,rtsp://118.212.169.207:554/PLTV/88888888/224/3221227263/10000100000000060000000001461890_0.smil
-江西教育,rtsp://118.212.169.207:554/PLTV/88888888/224/3221227283/10000100000000060000000001741171_0.smil
+CHC家庭影院,http://www.liuyunw.com:88/zb/itv.php?id=chcjt
+CHC动作电影,http://www.liuyunw.com:88/zb/itv.php?id=chcdz
+CHC高清电影,http://www.liuyunw.com:88/zb/itv.php?id=chcgq
