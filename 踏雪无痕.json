@@ -806,13 +806,6 @@
             ]
         },
         {
-            "key": "EMO",
-            "name": "EMO蓝光影院",
-            "type": 3,
-            "api": "csp_AppYsV2",
-            "ext": "http://one3.emofun.top/mogai_api.php/v1.vod"
-        },
-        {
             "key": "NoSearch_Yj1211_spider",
             "name": "直播聚合",
             "api": "csp_Yj1211",
