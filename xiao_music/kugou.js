@@ -1,700 +1,490 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = require("axios");
-const he = require("he");
 const cheerio_1 = require("cheerio");
 const CryptoJS = require("crypto-js");
-
-const host = "http://ww" + "w.90" + "t8.com"
-const token_host = "https://a" + "gi" + "t.ai"
-const token_txt = 'token_date: 2023-12-20'
-
-let enable_plugin = true;
-const plugin_name = "酷狗音乐"
-
-const pageSize = 30;
-let music_info = {
-    url: "",
-    rawLrc: "",
-    artwork: "",
-}
-
-
-async function get_plugin_token() {
-    let raw_html = (await axios_1.default.get(token_host + "/vale_gtt/MSC_API/raw/branch/master/my_plugins/token")).data
-    console.log("raw_html=", raw_html)
-    if(token_txt !== raw_html)
-    {
-        enable_plugin = false;
-        console.log("Token无效, 本插件已禁用。", plugin_name)
-    }
-    else
-    {
-        enable_plugin = true;
-        console.log("Token有效, 已使能本插件。", plugin_name)
-    }
-}
-
+const pageSize = 20;
+const validMusicFilter = (_) => _.privilege === 0 || _.privilege === 8;
 function formatMusicItem(_) {
-    const albumid = _.albumid || _.album?.id;
-    const albummid = _.albummid || _.album?.mid;
-    const albumname = _.albumname || _.album?.title;
+    var _a, _b, _c, _d, _e, _f, _g;
     return {
-        id: _.id,           // 音乐在2t58的id
-        songmid: undefined, // 音乐在酷我的id
-        title: _.title,
-        artist: _.artist,
-        artwork: undefined,
-        album: albumname,
-        lrc: _.lyric || undefined,
-        albumid: undefined,
-        albummid: undefined,
+        id: _.hash,
+        title: _.songname,
+        artist: (_a = _.singername) !== null && _a !== void 0 ? _a : (((_c = (_b = _.authors) === null || _b === void 0 ? void 0 : _b.map((_) => { var _a; return (_a = _ === null || _ === void 0 ? void 0 : _.author_name) !== null && _a !== void 0 ? _a : ""; })) === null || _c === void 0 ? void 0 : _c.join(", ")) ||
+            ((_f = (_e = (_d = _.filename) === null || _d === void 0 ? void 0 : _d.split("-")) === null || _e === void 0 ? void 0 : _e[0]) === null || _f === void 0 ? void 0 : _f.trim())),
+        album: (_g = _.album_name) !== null && _g !== void 0 ? _g : _.remark,
+        album_id: _.album_id,
+        album_audio_id: _.album_audio_id,
+        artwork: _.album_sizable_cover
+            ? _.album_sizable_cover.replace("{size}", "400")
+            : undefined,
+        "320hash": _["320hash"],
+        sqhash: _.sqhash,
+        origin_hash: _.origin_hash,
     };
 }
-
-async function parse_play_list_html(raw_data, separator) {
-    const $ = cheerio_1.load(raw_data);
-    const raw_play_list = $("div.main").find("li");
-    let song_list_arr = [];
-    for(let i=0; i<raw_play_list.length; i++)
-    {
-        const item=$(raw_play_list[i]).find("a");
-        
-        let data_id = $(item[0]).attr("href").match(/\/mp3\/(.*?).html/)[1]
-        // console.log($(item[0]).text())
-        let _text = $(item[0]).text()
-        let separated_text =_text.split(separator)
-        let data_artist = separated_text[0] // 通过分隔符区分歌手和歌名
-        let data_title = separated_text[1]!="" ? separated_text[1]:separated_text[2];
-        data_title = (data_title.split("》"))[0];
-        song_list_arr.push({
-            id: data_id, 
-            title: data_title, 
-            artist: data_artist,
-        })
+function formatImportMusicItem(_) {
+    var _a, _b, _c, _d, _e, _f, _g;
+    let title = _.name;
+    const singerName = _.singername;
+    if (singerName && title) {
+        const index = title.indexOf(singerName);
+        if (index !== -1) {
+            title = (_a = title.substring(index + singerName.length + 2)) === null || _a === void 0 ? void 0 : _a.trim();
+        }
+        if (!title) {
+            title = singerName;
+        }
     }
-    // console.log("song_list_arr:",song_list_arr)
-    return(song_list_arr)
-}
-
-async function parse_top_list_html(raw_data) {
-    const $ = cheerio_1.load(raw_data);
-    const raw_play_list = $("div.gt").find("li");
-    const page_data = $($($("div.main")[0]).find("div")[1]).text();
-    let cover_img = "https://agit.ai/vale_gtt/MSC_API/raw/branch/master/my_plugins/logo/kg.jpg"
-    let hot_list = [];
-    for(let i=1; i<12; i++)
-    {
-        const item=$(raw_play_list[i]).find("a");
-        let data_address = $(item[0]).attr("href")
-        let data_title = $(item[0]).text()
-        hot_list.push({
-            id: data_address, 
-            coverImg: cover_img,
-            title: data_title, 
-            description: "每日同步官方数据。" + page_data
-        })
-    }
-    let spectial_list = []
-    for(let i=13; i<24; i++)
-    {
-        const item=$(raw_play_list[i]).find("a");
-        let data_address = $(item[0]).attr("href")
-        let data_title = $(item[0]).text()
-        spectial_list.push({
-            id: data_address, 
-            coverImg: cover_img,
-            title: data_title, 
-            description: "每日同步官方数据。"// + page_data
-        })
-    }
-    let global_list = []
-    for(let i=26; i<36; i++)
-    {
-        const item=$(raw_play_list[i]).find("a");
-        let data_address = $(item[0]).attr("href")
-        let data_title = $(item[0]).text()
-        global_list.push({
-            id: data_address, 
-            coverImg: cover_img,
-            title: data_title, 
-            description: "每日同步官方数据。"// + page_data
-        })
-    }
-    // console.log("song_list_arr:",song_list_arr)
+    const qualites = _.relate_goods;
     return {
-        hot_list,
-        spectial_list,
-        global_list
-    };
-    
-}
-
-async function parse_play_type_html(raw_data) {
-    // 解析歌单分类
-    const $ = cheerio_1.load(raw_data);
-    const raw_group_list = $("div.gt").find("li")
-    let group_list =[]
-    let play_type =[]
-    for(let i=1; i<raw_group_list.length; i++)
-    {
-        let data_address = $(raw_group_list[i]).find("a").attr("href")
-        let data_title = $(raw_group_list[i]).text()
-        play_type.push({
-            id: data_address,
-            digest: "song",
-            title: data_title,
-            sign: "song"
-        })
-
-
-    }
-    group_list.push({
-        name:'歌单分类',
-        data: play_type,
-    })
-    return group_list;
-}
-
-async function parse_singer_type_html(raw_data) {
-    // 解析歌手分类
-    const $ = cheerio_1.load(raw_data);
-    // console.log(raw_data)
-    const raw_group_list = $("div.gt").find("li")
-    let group_list =[]
-    let play_type =[]
-    for(let i=1; i<raw_group_list.length; i++)
-    {
-        let data_address = $(raw_group_list[i]).find("a").attr("href")
-        let data_title = $(raw_group_list[i]).text()
-        play_type.push({
-            id: data_address,
-            digest: "singer",
-            title: data_title,
-            sign: "singer"
-        })
-
-
-    }
-    // console.log(play_type)
-    group_list.push({
-        name:'歌手分类',
-        data: play_type,
-    })
-    return group_list;
-}
-
-async function parse_song_list_html(raw_data) {
-    // 解析歌单分类中的歌单列表
-    const $ = cheerio_1.load(raw_data);
-    const raw_song_list = $("div.mv_list").find("li")
-    // $(raw_group_list[i]).find("li")
-    let song_list = []
-    for(let i=0; i<raw_song_list.length; i++)
-    {
-        let item_1 = $(raw_song_list[i]).find("a")
-        let data_id = $(item_1[0]).attr("href")
-        let data_title = $(raw_song_list[i]).find("img").attr("title")
-        let data_img = $(raw_song_list[i]).find("img").attr("src")
-        song_list.push({
-            name: data_title,
-            uname: undefined,
-            id: data_id,
-            img: data_img,
-            listencnt: undefined,
-            uid: undefined,
-            sign: "song"
-        })
-    }
-    let total  = $("div.pagedata").find("span").text();
-    return {
-        count: total,
-        list: song_list,
+        id: _.hash,
+        title,
+        artist: singerName,
+        album: (_b = _.albumname) !== null && _b !== void 0 ? _b : "",
+        album_id: _.album_id,
+        album_audio_id: _.album_audio_id,
+        artwork: (_d = (_c = _ === null || _ === void 0 ? void 0 : _.info) === null || _c === void 0 ? void 0 : _c.image) === null || _d === void 0 ? void 0 : _d.replace("{size}", "400"),
+        "320hash": (_e = qualites === null || qualites === void 0 ? void 0 : qualites[1]) === null || _e === void 0 ? void 0 : _e.hash,
+        sqhash: (_f = qualites === null || qualites === void 0 ? void 0 : qualites[2]) === null || _f === void 0 ? void 0 : _f.hash,
+        origin_hash: (_g = qualites === null || qualites === void 0 ? void 0 : qualites[3]) === null || _g === void 0 ? void 0 : _g.hash,
     };
 }
-
-async function parse_singer_list_html(raw_data) {
-    // 解析歌单分类中的歌单列表
-    const $ = cheerio_1.load(raw_data);
-    const raw_song_list = $("div.gs_list").find("li")
-    // $(raw_group_list[i]).find("li")
-    let song_list = []
-    for(let i=0; i<raw_song_list.length; i++)
-    {
-        let item_1 = $(raw_song_list[i]).find("a")
-        let data_id = $(item_1[0]).attr("href")
-        let data_title = $(raw_song_list[i]).find("img").attr("title")
-        let data_img = $(raw_song_list[i]).find("img").attr("src")
-        song_list.push({
-            name: data_title,
-            uname: undefined,
-            id: data_id,
-            img: data_img,
-            listencnt: undefined,
-            uid: undefined,
-            sign: "singer"
-        })
-    }
-    let total  = $("div.pagedata").find("span").text();
+const headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36",
+    Accept: "*/*",
+    "Accept-Encoding": "gzip, deflate",
+    "Accept-Language": "zh-CN,zh;q=0.9",
+};
+async function searchAlbum(query, page) {
+    const res = (await axios_1.default.get("http://msearch.kugou.com/api/v3/search/album", {
+        headers,
+        params: {
+            version: 9108,
+            iscorrection: 1,
+            highlight: "em",
+            plat: 0,
+            keyword: query,
+            pagesize: 20,
+            page,
+            sver: 2,
+            with_res_tag: 0,
+        },
+    })).data;
+    const albums = res.data.info.map((_) => {
+        var _a, _b;
+        return ({
+            id: _.albumid,
+            artwork: (_a = _.imgurl) === null || _a === void 0 ? void 0 : _a.replace("{size}", "400"),
+            artist: _.singername,
+            title: (0, cheerio_1.load)(_.albumname).text(),
+            description: _.intro,
+            date: (_b = _.publishtime) === null || _b === void 0 ? void 0 : _b.slice(0, 10),
+        });
+    });
     return {
-        count: total,
-        list: song_list,
+        isEnd: page * 20 >= res.data.total,
+        data: albums,
     };
 }
-
-// 获取歌单，包括歌单+歌手分类
-async function get_play_Sheet_Tags() {
-    // 获取歌单页面内容
-    //let play_type_url = host + "/gdlist/hot/1.html"
-    // console.log(url_serch)
-    //let play_type_html = (await axios_1.default.get(play_type_url)).data
-    let play_type_list = []//await parse_play_type_html(play_type_html)
-
-    // 获取歌手页面内容
-    let singer_type_url = host + "/singers/index/index/1.html"
-    // console.log(url_serch)
-    let singer_type_html = (await axios_1.default.get(singer_type_url)).data
-    let singer_type_list = await parse_singer_type_html(singer_type_html)
-
-    //合并歌单列表和歌手列表
-    let merger_list = singer_type_list;
-    for(let i=0; i<play_type_list.length; i++)
-    {
-        merger_list.push(play_type_list[i])
-    }
-    return merger_list;
+async function searchMusicSheet(query, page) {
+    const res = (await axios_1.default.get("http://mobilecdn.kugou.com/api/v3/search/special", {
+        headers,
+        params: {
+            format: "json",
+            keyword: query,
+            page,
+            pagesize: pageSize,
+            showtype: 1,
+        },
+    })).data;
+    const sheets = res.data.info.map(item => ({
+        title: item.specialname,
+        createAt: item.publishtime,
+        description: item.intro,
+        artist: item.nickname,
+        coverImg: item.imgurl,
+        gid: item.gid,
+        playCount: item.playcount,
+        id: item.specialid,
+        worksNum: item.songcount
+    }));
+    return {
+        isEnd: page * pageSize >= res.data.total,
+        data: sheets,
+    };
 }
-
-async function searchMusic(query, page) {
-    console.log("searchMusic enable_plugin=", enable_plugin)
-    if(!enable_plugin)
-    {
-        console.log("无效的Token, 本插件已禁用。")
+async function getTopLists() {
+    const lists = (await axios_1.default.get("http://mobilecdnbj.kugou.com/api/v3/rank/list?version=9108&plat=0&showtype=2&parentid=0&apiver=6&area_code=1&withsong=0&with_res_tag=0", {
+        headers: headers,
+    })).data.data.info;
+    const res = [
+        {
+            title: "热门榜单",
+            data: [],
+        },
+        {
+            title: "特色音乐榜",
+            data: [],
+        },
+        {
+            title: "全球榜",
+            data: [],
+        },
+    ];
+    const extra = {
+        title: "其他",
+        data: [],
+    };
+    lists.forEach((item) => {
+        var _a, _b, _c, _d;
+        if (item.classify === 1 || item.classify === 2) {
+            res[0].data.push({
+                id: item.rankid,
+                description: item.intro,
+                coverImg: (_a = item.imgurl) === null || _a === void 0 ? void 0 : _a.replace("{size}", "400"),
+                title: item.rankname,
+            });
+        }
+        else if (item.classify === 3 || item.classify === 5) {
+            res[1].data.push({
+                id: item.rankid,
+                description: item.intro,
+                coverImg: (_b = item.imgurl) === null || _b === void 0 ? void 0 : _b.replace("{size}", "400"),
+                title: item.rankname,
+            });
+        }
+        else if (item.classify === 4) {
+            res[2].data.push({
+                id: item.rankid,
+                description: item.intro,
+                coverImg: (_c = item.imgurl) === null || _c === void 0 ? void 0 : _c.replace("{size}", "400"),
+                title: item.rankname,
+            });
+        }
+        else {
+            extra.data.push({
+                id: item.rankid,
+                description: item.intro,
+                coverImg: (_d = item.imgurl) === null || _d === void 0 ? void 0 : _d.replace("{size}", "400"),
+                title: item.rankname,
+            });
+        }
+    });
+    if (extra.data.length !== 0) {
+        res.push(extra);
+    }
+    return res;
+}
+async function getTopListDetail(topListItem) {
+    const res = await axios_1.default.get(`http://mobilecdnbj.kugou.com/api/v3/rank/song?version=9108&ranktype=0&plat=0&pagesize=100&area_code=1&page=1&volid=35050&rankid=${topListItem.id}&with_res_tag=0`, {
+        headers,
+    });
+    return Object.assign(Object.assign({}, topListItem), { musicList: res.data.data.info.map(formatMusicItem) });
+}
+async function getAlbumInfo(albumItem, page = 1) {
+    const res = (await axios_1.default.get("http://mobilecdn.kugou.com/api/v3/album/song", {
+        params: {
+            version: 9108,
+            albumid: albumItem.id,
+            plat: 0,
+            pagesize: 100,
+            area_code: 1,
+            page,
+            with_res_tag: 0,
+        },
+    })).data;
+    return {
+        isEnd: page * 100 >= res.data.total,
+        albumItem: {
+            worksNum: res.data.total,
+        },
+        musicList: res.data.info.filter(validMusicFilter).map((_) => {
+            var _a;
+            const [artist, songname] = _.filename.split("-");
+            return {
+                id: _.hash,
+                title: songname.trim(),
+                artist: artist.trim(),
+                album: (_a = _.album_name) !== null && _a !== void 0 ? _a : _.remark,
+                album_id: _.album_id,
+                album_audio_id: _.album_audio_id,
+                artwork: albumItem.artwork,
+                "320hash": _["320hash"],
+                sqhash: _.sqhash,
+                origin_hash: _.origin_hash,
+            };
+        }),
+    };
+}
+async function importMusicSheet(urlLike) {
+    var _a;
+    let id = (_a = urlLike.match(/^(?:.*?)(\d+)(?:.*?)$/)) === null || _a === void 0 ? void 0 : _a[1];
+    let musicList = [];
+    if (!id) {
         return;
     }
+    let res = await axios_1.default.post(`http://t.kugou.com/command/`, {
+        appid: 1001,
+        clientver: 9020,
+        mid: "21511157a05844bd085308bc76ef3343",
+        clienttime: 640612895,
+        key: "36164c4015e704673c588ee202b9ecb8",
+        data: id,
+    });
+    if (res.status === 200 && res.data.status === 1) {
+        let data = res.data.data;
+        let response = await axios_1.default.post(`http://www2.kugou.kugou.com/apps/kucodeAndShare/app/`, {
+            appid: 1001,
+            clientver: 10112,
+            mid: "70a02aad1ce4648e7dca77f2afa7b182",
+            clienttime: 722219501,
+            key: "381d7062030e8a5a94cfbe50bfe65433",
+            data: {
+                id: data.info.id,
+                type: 3,
+                userid: data.info.userid,
+                collect_type: data.info.collect_type,
+                page: 1,
+                pagesize: data.info.count,
+            },
+        });
+        if (response.status === 200 && response.data.status === 1) {
+            let resource = [];
+            response.data.data.forEach((song) => {
+                resource.push({
+                    album_audio_id: 0,
+                    album_id: "0",
+                    hash: song.hash,
+                    id: 0,
+                    name: song.filename.replace(".mp3", ""),
+                    page_id: 0,
+                    type: "audio",
+                });
+            });
+            let postData = {
+                appid: 1001,
+                area_code: "1",
+                behavior: "play",
+                clientver: "10112",
+                dfid: "2O3jKa20Gdks0LWojP3ly7ck",
+                mid: "70a02aad1ce4648e7dca77f2afa7b182",
+                need_hash_offset: 1,
+                relate: 1,
+                resource,
+                token: "",
+                userid: "0",
+                vip: 0,
+            };
+            var result = await axios_1.default.post(`https://gateway.kugou.com/v2/get_res_privilege/lite?appid=1001&clienttime=1668883879&clientver=10112&dfid=2O3jKa20Gdks0LWojP3ly7ck&mid=70a02aad1ce4648e7dca77f2afa7b182&userid=390523108&uuid=92691C6246F86F28B149BAA1FD370DF1`, postData, {
+                headers: {
+                    "x-router": "media.store.kugou.com",
+                },
+            });
+            if (response.status === 200 && response.data.status === 1) {
+                musicList = result.data.data
+                    .filter(validMusicFilter)
+                    .map(formatImportMusicItem);
+            }
+        }
+    }
+    return musicList;
+}
 
-    let key_word = encodeURIComponent(query)
-    let url_serch = host + "/so.php?wd=" + key_word
-    // console.log(url_serch)
-    let search_res = (await axios_1.default.get(url_serch)).data
-    // console.log(search_res)
-    let song_list = await parse_play_list_html(search_res, " - ")
 
-    const songs = song_list.map(formatMusicItem);
 
+
+
+/* 换成免费歌曲的更多接口
+async function searchMusic(query, page) {
+    const res = (await axios_1.default.get("http://mobilecdn.kugou.com/api/v3/search/song", {
+        headers,
+        params: {
+            format: "json",
+            keyword: query,
+            page,
+            pagesize: pageSize,
+            showtype: 1,
+        },
+    })).data;
+    const songs = res.data.info.filter(validMusicFilter).map(formatMusicItem);
     return {
-        isEnd: true,
+        isEnd: page * pageSize >= res.data.total,
+        data: songs,
+    };
+}
+*/
+const signKey = "NVPh5oo715z5DIWAeQlhMDsWXXQV4hwt";
+async function signMD5(content) {
+    return CryptoJS.MD5(signKey + content + signKey).toString();
+}
+async function searchMusic(query, page) {
+    let time = new Date().getTime(),
+        mid = await signMD5(query + page + time),
+        params = [
+            "srcappid=2919",
+            "clientver=1000",
+            "clienttime=" + time,
+            "mid=" + mid,
+            "uuid=" + mid,
+            "dfid=-",
+            "appid=1058",
+            "token=",
+            "userid=0",
+            "keyword=" + query,
+            "page=" + page,
+            "pagesize=" + pageSize
+        ].sort(),
+        signature = await signMD5(params.join("")),
+        url = "https://gateway.kugou.com/complexsearch/v3/search/song?" + params.join("&") + "&signature=" + signature;
+    const res = (await axios_1.default.get(url, {
+        headers
+    })).data;
+    const songs = res.data.lists.map((_) => {
+        return {
+            id: _.FileHash,
+            title: _.OriSongName + (_.Suffix ? ' ' + _.Suffix : ''),
+            artist: _.SingerName,
+            album: _.AlbumName,
+            album_id: _.AlbumID,
+            album_audio_id: _.MixSongID,
+            artwork: _.Image ? _.Image.replace("{size}", "400") : undefined,
+            "320hash": _.HQ ? _.HQ.Hash : _.HQ,
+            sqhash: _.SQ ? _.SQ.Hash : _.SQ,
+            origin_hash: _.Res ? _.Res.Hash : _.Res
+        };
+    });
+    return {
+        isEnd: page * pageSize >= res.data.total,
         data: songs,
     };
 }
 
 
-async function getLyric(musicItem) {
-    // console.log("getLyric:", musicItem)
-    let res = (await (0, axios_1.default)({
-        method: "get",
-        url: host+"/plug/down.php?ac=lrc&id=" + musicItem.id,
-        timeout: 10000,
-        // responseType:'txt',
-    })).data;
-    res = res.substring(34)
-    res = res.replace("90T8", '****');  //屏蔽歌词中的网站信息
-    res = res.replace("90听音乐网", '');  
-    res = res.replace("44h4", '****'); 
-    res = res.replace("欢迎来访", '');
-
-    // console.log("getLyric:", res)
-    return {
-        rawLrc: res
-    };
-}
 
 
-async function getTopLists() {
-    if(!enable_plugin)
-    {
-        console.log("无效的Token, 本插件已禁用。")
-        return;
+
+/* 20240225 用不了了
+async function getMediaSource(musicItem, quality) {
+    let hash;
+    if (quality === "low") {
+        hash = musicItem.id;
     }
-        
-    const raw_html = (await axios_1.default.get(host + "/list/top.html")).data
-    let toplist = await parse_top_list_html(raw_html)
-
-    return [{
-        title: "热门榜单",
-        data: (toplist.hot_list).map((_) => {
-            return ({
-                id: _.id,
-                coverImg: _.coverImg,
-                title: _.title,
-                description: _.description,
-            });
-        }),
-    }, 
-    {
-        title: "特色音乐",
-        data: (toplist.spectial_list).map((_) => {
-            return ({
-                id: _.id,
-                coverImg: _.coverImg,
-                title: _.title,
-                description: _.description,
-            });
-        }),
-    },
-    {
-        title: "全球榜单",
-        data: (toplist.global_list).map((_) => {
-            return ({
-                id: _.id,
-                coverImg: _.coverImg,
-                title: _.title,
-                description: _.description,
-            });
-        }),
+    else if (quality === "standard") {
+        hash = musicItem["320hash"];
     }
-];
-}
-
-async function getTopListDetail(topListItem) {
-
-    let url_serch = host + topListItem.id
-    // console.log(url_serch)
-    let search_res = (await axios_1.default.get(url_serch)).data
-    let song_list = await parse_play_list_html(search_res, "《")
-
-    let res =  {
-        ...topListItem,
-        musicList: song_list.map((_) => {
-            return {
-                id: _.id,
-                title: _.title,
-                artist: _.artist,
-                album: undefined,
-                albumId: undefined,
-                artistId: undefined,
-                formats: undefined,
-            };
-        }),
-    };
-    return res;
-}
-
-async function getMusicSheetResponseById(sheet, page, pagesize = 50) {
-    let separator;// 分隔符
-    let bexchange = false;  //歌手、歌名交换位置
-    // console.log('getMusicSheetResponseById, ',sheet)
-    let play_list=[]
-    if(sheet.sign === "singer")
-    {
-        separator = "《"
-        let sheet_id = sheet.id.replace("/1.html", "")
-        let _play_list = []
-        for(let idx=0; idx<=1; idx++)
-        {
-            let url_serch = host + sheet_id + `/${idx+1}.html`
-            let raw_html = (await axios_1.default.get(url_serch)).data
-            _play_list[idx] = await parse_play_list_html(raw_html, separator)
-        }
-        play_list = [..._play_list[0], ..._play_list[1]];
-    }
-    else
-    {
-        separator = "《"
-        // bexchange = true
-        let raw_html = (await axios_1.default.get(host + sheet.id)).data
-        play_list = parse_play_list_html(raw_html, separator, bexchange)
-    }
-    
-    return play_list;
-}
-
-async function getRecommendSheetTags() {
-    let song_list = await get_play_Sheet_Tags()
-    // console.log(res)
-    const data = song_list
-        .map((group) => ({
-        title: group.name,
-        data: group.data.map((_) => ({
-            id: _.id,
-            digest: _.digest,
-            title: _.title,
-            sign: _.sign
-        })),
-    }));
-
-    //固定的歌单标签
-    const pinned = [
-        {
-            id: "/singers/huayu/index/1.html",
-            title: "华语歌手",
-            digest: "fixed",
-            sign: "singer"
-        },
-        {
-            id: "/singers/hanguo/index/1.html",
-            title: "韩国歌手",
-            digest: "fixed",
-            sign: "singer"
-        },
-        {
-            title: "欧美歌手",
-            digest: "fixed",
-            sign: "singer",
-            id: "/singers/oumei/index/1.html",
-        },
-    ];
-    return {
-        data,
-        pinned,
-    };
-}
-
-async function getRecommendSheetsByTag(tag, page) {
-    // console.log("getRecommendSheetsByTag tag = ",tag)
-    const pageSize = 20;
-    let res;
-    if (tag.id) {
-        // 全部歌单
-        res = (await axios_1.default.get(host + tag.id)).data;
+    else if (quality === "high") {
+        hash = musicItem.sqhash;
     }
     else {
-        // 默认歌单
-        res = (await axios_1.default.get(host+"/singers/index/index/1.html")).data;
+        hash = musicItem.origin_hash;
     }
-
-    let song_list_res
-    // if(tag.sign === "singer")
-    // {
-        song_list_res = parse_singer_list_html(res)// 歌单列表
-    // }
-    // else
-    // {
-        // song_list_res = parse_song_list_html(res)// 歌单列表
-    // }
-    
-    
-    // const isEnd = page * pageSize >= res.total;
+    if (!hash) {
+        return;
+    }
+    const res = (await axios_1.default.get("https://wwwapi.kugou.com/yy/index.php", {
+        headers,
+        params: {
+            r: "play/getdata",
+            hash: hash,
+            appid: "1014",
+            mid: "56bbbd2918b95d6975f420f96c5c29bb",
+            album_id: musicItem.album_id,
+            album_audio_id: musicItem.album_audio_id,
+            _: Date.now(),
+        },
+    })).data.data;
+    const url = res.play_url || res.play_backup_url;
+    if (!url) {
+        return;
+    }
     return {
-        isEnd: true,
-        data: (await song_list_res).list.map((_) => ({
-            title: _.name,
-            artist: _.uname,
-            id: _.id,
-            artwork: _.img,
-            playCount: _.listencnt,
-            createUserId: _.uid,
-            sign: _.sign
-        })),
+        url,
+        rawLrc: res.lyrics,
+        artwork: res.img,
     };
 }
-
-async function getMediaDownloadUrl(musicItem, quality){
-    let _header = {
-        'Referer': host + `/mp3/${musicItem}.html`,
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0.1; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Mobile Safari/537.36 Edg/89.0.774.68',
-        'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-        'Accept-Encoding':'gzip, deflate',
-        'Accept-Language':'zh-CN,zh;q=0.9',
-        'Cookie':'down_mima=ok',
-        'Connection':'keep-alive',
-        "Content-Type": "application/x-www-form-urlencoded",
-    }
-
-    let _url = host + `/plug/down.php?ac=music&id=${musicItem.id}`
-    // console.log("---------------------_url: ", _url)
-    // console.log("---------------------_header: ", _header)
-
-    let mp3_Result = await fetch(_url, {
-        method: 'get',
-        headers: _header,
-    });
-
-    // console.log("---------------------search from third: ", mp3_Result.url)
-    return  mp3_Result.url
-}
-
-
+*/
 async function getMediaSource(musicItem, quality) {
-    // 90t8.com获取音源
-    let req_url = host + `/mp3/${musicItem.id}.html`
-    let mp3_Result = (await (0, axios_1.default)({
-        url: req_url,
-        method: 'get',
-        timeout: 3000,
-    })).data;
-    // console.log("search from third: ", mp3_Result)
-    if(mp3_Result)
-    {
-        const $ = cheerio_1.load(mp3_Result);
-        let raw_lrc = $("div.gc").text();
-        let raw_url_html = $("div.container").find("script").text().match(/url:"(.*?).mp3"/)
-        let raw_artwork = $("div.playhimg").find("img").attr("src");
-        let raw_url = ''
-        
-        if(raw_url_html === null)
-        {
-            raw_url = await getMediaDownloadUrl(musicItem, quality)
-        }
-        else
-        {
-            raw_url = raw_url_html[1] + ".mp3"
-        }
-
-        if(raw_url !== null)
-        {
-            raw_lrc = raw_lrc.replace("90T8", '****');  //屏蔽歌词中的网站信息
-            raw_lrc = raw_lrc.replace("44h4", '****'); 
-            raw_lrc = raw_lrc.replace("90听音乐网", '');  //屏蔽歌词中的网站信息
-        
-            music_info = {
-                url: raw_url,
-                rawLrc: raw_lrc,
-                artwork: raw_artwork,
-            };
-            return music_info;
+    const url = (await axios_1.default.get("https://m.kugou.com/app/i/getSongInfo.php", {
+        params: {
+            cmd: "playInfo",
+            hash: musicItem.id
+        },
+    })).data.url;
+    return {
+        url
+    };
+}
+async function getLyric(musicItem) {
+    let lrc, res = (await axios_1.default.get("http://krcs.kugou.com/search", {
+        params: {
+            ver: "1",
+            man: "yes",
+            client: "mobi",
+            keyword: "",
+            duration: "",
+            hash: musicItem.id,
+            album_audio_id: "",
+        },
+    })).data.candidates;
+    for (let _ of res) {
+        if (_ && _.id && _.accesskey) {
+            lrc = (await axios_1.default.get("http://lyrics.kugou.com/download", {
+                params: {
+                    ver: "1",
+                    client: "pc",
+                    id: _.id,
+                    accesskey: _.accesskey,
+                    fmt: "lrc",
+                    charset: "utf8",
+                },
+            })).data.content;
+            if (lrc && lrc != "") {
+                break;
+            }
         }
     }
     return {
-        url: ""
+        rawLrc: CryptoJS.enc.Base64.parse(lrc).toString(CryptoJS.enc.Utf8)
     };
 }
 
-async function getMusicSheetInfo(sheet, page) {
-    // console.log("getMusicSheetInfo, sheet = ", sheet)
-    const res = await getMusicSheetResponseById(sheet, page, pageSize);
-    return {
-        isEnd: true,
-        musicList: res.map((_) => ({
-            id: _.id,
-            title: _.title,
-            artist: _.artist,
-            album: undefined,
-            albumId: undefined,
-            artistId: undefined,
-            formats: undefined,
-        })),
-    };
-}
 
-async function getMusicInfo(musicItem) {
-    let req_url = host + `/mp3/${musicItem.id}.html`
-    let mp3_Result = (await (0, axios_1.default)({
-        url: req_url,
-        method: 'get',
-        timeout: 3000,
-    })).data;
-    // console.log("search from third: ", mp3_Result)
 
-    const $ = cheerio_1.load(mp3_Result);
-    let raw_artwork = $("div.playhimg").find("img").attr("src");
 
-    return {
-        artwork: raw_artwork,
-    };
-}
 
-// 获取token，并根据token的有效性，开启或关闭本插件
-get_plugin_token()
 module.exports = {
-    platform: plugin_name,
-    version: "0.1.15",
+    platform: "酷狗",
+    version: "0.1.6",
+    author: '反馈Q群@365976134',
     appVersion: ">0.1.0-alpha.0",
-    author: "Vale",
-    order: 19,
-    srcUrl: "https://agit.ai/vale_gtt/MSC_API/raw/branch/master/my_plugins/third_party/my_90t8.js",
+    srcUrl: "https://gitee.com/ThomasYou/musicfree/raw/master/dist/kg/index.js",
     cacheControl: "no-cache",
+    primaryKey: ["id", "album_id", "album_audio_id"],
     hints: {
-        importMusicSheet: [],
+        importMusicSheet: [
+            "仅支持酷狗APP通过酷狗码导入，输入纯数字酷狗码即可。",
+            "导入过程中会过滤掉所有VIP/试听/收费音乐，导入时间和歌单大小有关，请耐心等待",
+        ],
     },
-
+    supportedSearchType: ["music", "album", "sheet",],
     async search(query, page, type) {
-        // console.log("search(query, page, type): ", query, page, type)
         if (type === "music") {
-            return await searchMusic(query, page);  //搜索歌曲
+            return await searchMusic(query, page);
+        }
+        else if (type === "album") {
+            return await searchAlbum(query, page);
+        }
+        else if (type === "sheet") {
+            return await searchMusicSheet(query, page);
         }
     },
-
-    // 获取音乐信息，分为三步
-    getMusicInfo,   // 获取音乐所有信息
-    getMediaSource, // 获取音源连接
-    getLyric,       // 获取歌词
-
-    getTopLists,            // 获取榜单
-    getTopListDetail,       // 获取榜单详细内容
-    getRecommendSheetTags,
-    getRecommendSheetsByTag,
-    getMusicSheetInfo,
-    
+    getMediaSource,
+    // getLyric: getMediaSource,
+    getLyric,
+    getTopLists,
+    getTopListDetail,
+    getAlbumInfo,
+    importMusicSheet,
 };
-
-// searchMusic("圣诞星").then(console.log)
-// getLyric()
-// getTopLists().then(console.log)
-// getRecommendSheetTags()
-
-// let music_item_1 = {
-//       id: '5fa340b158c2e385e64338177384cfd7',
-//       songmid: undefined,
-//       title: '圣诞星 (feat. 杨瑞代)',
-//       artist: '周杰伦',
-//       artwork: undefined,
-//       album: undefined,
-//       lrc: undefined,
-//       albumid: undefined,
-//       albummid: undefined
-//     }
-// getLyric(music_item_1)
-// let music_item_2 = {
-//       id: '10986b847f4ddb6f42041b426f7756eb',
-//       songmid: undefined,
-//       title: '圣诞星 (改编版)',
-//       artist: '大力滴滴滴',
-//       artwork: undefined,
-//       album: undefined,
-//       lrc: undefined,
-//       albumid: undefined,
-//       albummid: undefined
-//     }
-// getMediaSource(music_item_1).then(console.log)
-// getMediaDownloadUrl(music_item_2)
-// let top_item={
-//     id: "/list/kugou.html",
-//     coverImg: undefined,
-//     title: "酷狗飙升榜",
-//     description: "每日同步官方数据。",
-// }
-
-// getTopListDetail(top_item).then(console.log)
-// getRecommendSheetTags().then(console.log)
-
-
-// let tag = {
-//     id: '/singers/huayu/index/1.html', 
-//     title: '华语歌手', 
-//     digest: "singer" ,
-//     sign: "singer"
-// }
-
-// let tag1 = {
-//     id: '/gdlist/jlhou/1.html', 
-//     title: '90', 
-//     digest: "song" 
-// }
-
-// getRecommendSheetsByTag(tag).then(console.log)
-
-
-// let singer = 
-// {
-//     title: '周杰伦',
-//     artist: undefined,
-//     id: '/singer/3520/1.html',
-//     artwork: 'http://singerimg.kugou.com/uploadpic/softhead/400/20230510/20230510173043311.jpg',
-//     playCount: undefined,
-//     createUserId: undefined,
-//     sign: 'singer'
-//   }
-
-
-// getMusicSheetInfo(singer, 0).then(console.log)
