@@ -14,32 +14,7 @@
         }
     ],
     "sites": [
-        {"key":"csp_Kkys",
-         "name":"🌈 xiao TV",
-         "type":3,
-         "api":"csp_Kkys",
-         "searchable":1,
-         "quickSearch":1,
-         "filterable":1,
-         "changeable":1},
-        {"key":"csp_LiteApple",
-         "name":"🍎小苹果",
-         "type":3,
-         "api":"csp_LiteApple",
-         "searchable":1,
-         "quickSearch":1,
-         "filterable":1,
-         "changeable":1}, 
-        {"key":"csp_NanGua","name":"🎃南瓜","type":3,"api":"csp_NanGua","searchable":1,"quickSearch":1,"filterable":1,"changeable":1},
-        {
-            "key": "畅梦",
-            "name": "💤┃畅梦┃影视",
-            "type": 3,
-            "api": "http://cf.weixine.net/js/lib/drpy2.min.js",
-            "ext": "http://cf.weixine.net/js/changmeng.js"
-        },
-         {
-      "key": "火狐",
+      ｛"key": "火狐",
       "name": "🦊茶杯狐",
       "type": 1,
       "api": "https://hhzyapi.com/api.php/provide/vod/",
@@ -72,6 +47,15 @@
         "欧美动漫"
       ]
     },
+        {"key":"csp_LiteApple",
+         "name":"🍎小苹果",
+         "type":3,
+         "api":"csp_LiteApple",
+         "searchable":1,
+         "quickSearch":1,
+         "filterable":1,
+         "changeable":1}, 
+        {"key":"csp_NanGua","name":"🎃南瓜","type":3,"api":"csp_NanGua","searchable":1,"quickSearch":1,"filterable":1,"changeable":1},
         {
       "key": "索尼采集",
       "name": "🥤索尼影视",
