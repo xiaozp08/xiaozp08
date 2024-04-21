@@ -14,15 +14,8 @@
         }
     ],
     "sites": [
-        {"key":"csp_YQKan",
-         "name":"🌈 xiao TV",
-         "type":3,
-         "api":"csp_YQKan",
-         "searchable":1,
-         "quickSearch":1,
-        "filterable":1},
         {"key":"csp_Kkys",
-         "name":"💡酷看",
+         "name":"🌈 xiao TV",
          "type":3,
          "api":"csp_Kkys",
          "searchable":1,
