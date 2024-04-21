@@ -14,8 +14,8 @@
         }
     ],
     "sites": [
-      ｛"key": "火狐",
-      "name": "🦊茶杯狐",
+      ｛"key": "茶杯狐",
+      "name": "🌈 xiao TV",
       "type": 1,
       "api": "https://hhzyapi.com/api.php/provide/vod/",
       "searchable": 1,
