@@ -48,6 +48,7 @@
         "欧美动漫"
       ]
     },
+        {"key":"csp_Bttwoo","name":"✌比特","type":3,"api":"csp_Bttwoo","searchable":1,"quickSearch":1,"filterable":1},
         {"key":"csp_LiteApple",
          "name":"🍎小苹果",
          "type":3,
