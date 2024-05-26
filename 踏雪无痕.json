@@ -49,6 +49,7 @@
       ]
     },
 {"key":"csp_Kkys","name":"💡酷看","type":3,"api":"csp_Kkys","searchable":1,"quickSearch":1,"filterable":1,"changeable":1},
+{"key":"csp_SP360","name":"💘360","type":3,"api":"csp_SP360","searchable":1,"quickSearch":1,"filterable":1,"changeable":1},
         {"key":"csp_LiteApple",
          "name":"🍎小苹果",
          "type":3,
@@ -825,7 +826,7 @@
         }
     ],
 "parses": [{
-		"name": "Web聚合",
+	"name": "Web聚合",
 		"type": 3,
 		"url": "Web"
 	}, {
@@ -854,16 +855,9 @@
 			"flag": ["qq", "腾讯", "qiyi", "爱奇艺", "奇艺", "youku", "优酷", "mgtv", "芒果", "letv", "乐视", "pptv", "PPTV", "sohu", "bilibili", "哔哩哔哩", "哔哩"]
 		}  
 	}, {
-		"name": "云播",
+		"name": "咸鱼",
 		"type": 0,
-		"url": "https://vip.lianfaka.com/vip/?url=",
-		"ext": {
-			"flag": ["qq", "腾讯", "qiyi", "爱奇艺", "奇艺", "youku", "优酷", "mgtv", "芒果", "letv", "乐视", "pptv", "PPTV", "sohu", "bilibili", "哔哩哔哩", "哔哩"],"header":{"User-Agent":"okhttp/4.1.0"}
-		}   
-	}, {
-		"name": "剖云",
-		"type": 0,
-		"url": "https://www.pouyun.com/?url=",
+		"url": "https://jx.xyflv.cc/?url=",
 		"ext": {
 			"flag": ["qq", "腾讯", "qiyi", "爱奇艺", "奇艺", "youku", "优酷", "mgtv", "芒果", "letv", "乐视", "pptv", "PPTV", "sohu", "bilibili", "哔哩哔哩", "哔哩"]
 		}  
