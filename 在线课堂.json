@@ -1,5 +1,5 @@
 {
-    "spider": "https://gitlab.com/xiaozp08/xiaoTV/-/raw/main/PandaQ240724.jar",
+    "spider": "https://gitlab.com/xiaozp08/xiaoTV/-/raw/main/2.jar",
     "lives": [
         {
             "group": "redirect",
@@ -14,6 +14,7 @@
         }
     ],
     "sites": [
+    {
       "key": "小学",
       "name": "📚┃小学┃课堂",
       "type": 3,
