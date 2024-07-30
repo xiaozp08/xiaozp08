@@ -1,5 +1,5 @@
 {
-    "spider": "http://happy.xn--z7x900a.live/jar/PandaQ240724.jar",
+    "spider": "https://gitlab.com/xiaozp08/xiaoTV/-/raw/main/Yoursmile.jar",
     "lives": [
         {
             "group": "redirect",
@@ -14,49 +14,10 @@
         }
     ],
     "sites": [
-    {
-      "key": "小学",
-      "name": "📚┃小学┃课堂",
-      "type": 3,
-      "api": "csp_Bili",
-      "searchable": 0,
-      "quickSearch": 0,
-      "changeable": 0,
-      "style": {
-        "type": "rect",
-        "ratio": 1.597
-      },
-      "ext": "https://gitlab.com/fantaiying/ext/-/raw/main/小学课堂.json"
-    },
-    {
-      "key": "初中",
-      "name": "📚┃初中┃课堂",
-      "type": 3,
-      "api": "csp_Bili",
-      "searchable": 0,
-      "quickSearch": 0,
-      "changeable": 0,
-      "style": {
-        "type": "rect",
-        "ratio": 1.597
-      },
-      "ext": "https://gitlab.com/fantaiying/ext/-/raw/main/初中课堂.json"
-    },
-    {
-      "key": "高中",
-      "name": "📚┃高中┃课堂",
-      "type": 3,
-      "api": "csp_Bili",
-      "searchable": 0,
-      "quickSearch": 0,
-      "changeable": 0,
-      "style": {
-        "type": "rect",
-        "ratio": 1.597
-      },
-      "ext": "https://gitlab.com/fantaiying/ext/-/raw/main/高中课堂.json"
-    }],
-      {
+        {"key":"小学","name":"🅱️小学","type":3,"api":"csp_Bili","searchable":0,"quickSearch":0,"filterable":1,"ext":"https://ghproxy.net/https://raw.githubusercontent.com/yoursmile66/TVBox/main/sub/小学课堂.json"},
+{"key":"初中","name":"🅱️初中","type":3,"api":"csp_Bili","searchable":0,"quickSearch":0,"filterable":1,"ext":"https://ghproxy.net/https://raw.githubusercontent.com/yoursmile66/TVBox/main/sub/初中课堂.json"},
+{"key":"高中","name":"🅱️高中","type":3,"api":"csp_Bili","searchable":0,"quickSearch":0,"filterable":1,"ext":"https://ghproxy.net/https://raw.githubusercontent.com/yoursmile66/TVBox/main/sub/高中课堂.json"},
+        {
             "key": "push_agent",
             "name": "推送",
             "type": 3,
@@ -65,8 +26,8 @@
             "quickSearch": 0,
             "filterable": 0,
             "ext": "https://www.qiaoji8.com/jar1/token.txt"
-      },
-      {
+        },
+        {
             "key": "Music_spider",
             "name": "音乐欣赏",
             "api": "csp_Music",
@@ -75,10 +36,10 @@
             "quickSearch": 1,
             "searchable": 1,
             "ext": ""
-      }
+        }
     ],
     "parses": [
-      {
+        {
             "name": "解析聚合",
             "type": 3,
             "url": "Demo"
