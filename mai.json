@@ -48,20 +48,18 @@
         "欧美动漫"
       ]
     },
-{"key":"csp_Kkys","name":"💡酷看","type":3,"api":"csp_Kkys","searchable":1,"quickSearch":1,"filterable":1,"changeable":1},
 {"key":"csp_SP360","name":"💘360","type":3,"api":"csp_SP360","searchable":1,"quickSearch":1,"filterable":1,"changeable":1},
-        {"key":"csp_LiteApple",
-         "name":"🍎小苹果",
-         "type":3,
-         "api":"csp_LiteApple",
-         "searchable":1,
-         "quickSearch":1,
-         "filterable":1,
-         "changeable":1}, 
-        {"key":"csp_NanGua","name":"🎃南瓜","type":3,"api":"csp_NanGua","searchable":1,"quickSearch":1,"filterable":1,"changeable":1},
+key":"csp_TianTian","name":"🦉天天","type":3,"api":"csp_TianTian","searchable":1,"quickSearch":1,"filterable":1},
+{"key":"csp_Ikanbot","name":"❤️Ikanbot","type":3,"api":"csp_Ikanbot","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://v.aikanbot.com"},
+{"key":"csp_Kkys","name":"💡酷看","type":3,"api":"csp_Kkys","searchable":1,"quickSearch":1,"filterable":1,"changeable":1},
+{"key":"csp_YCyz","name":"☀原创","type":3,"api":"csp_YCyz","searchable":1,"quickSearch":1,"filterable":1,"changeable":1},
+{"key":"csp_Zx4k","name":"🚝专线","type":3,"api":"csp_Zx4k","playerType":2,"searchable":1,"quickSearch":1,"filterable":1,"changeable":1},
+{"key":"csp_LiteApple","name":"🍎小苹果","type":3,"api":"csp_LiteApple","searchable":1,"quickSearch":1,"filterable":1,"changeable":1},
+{"key":"csp_Jpys","name":"💮金牌","type":3,"api":"csp_Jpys","playerType":2,"searchable":1,"quickSearch":1,"changeable":1},
+{"key":"csp_NanGua","name":"🎃南瓜","type":3,"api":"csp_NanGua","searchable":1,"quickSearch":1,"filterable":1,"changeable":1},
   	{
    "key": "360",
-   "name": "360影视",
+   "name": "🚇360影视",
    "type": 1,
    "api": "https://360zy.com/api.php/provide/vod?",
    "searchable": 1,
@@ -104,7 +102,7 @@
   },
   	{
    "key": "爱坤",
-   "name": "爱坤影视",
+   "name": "🏕爱坤影视",
    "type": 1,
    "api": "https://ikunzyapi.com/api.php/provide/vod?",
    "searchable": 1,
@@ -893,14 +891,14 @@
 	}, {
 		"name": "jsonplayer",
 		"type": 0,
-		"url": "http://pan.qiaoji8.com/tvbox/neibu.php?url=",
+		"url": "https://jx.jsonplayer.com/player/?url=",
 		"ext": {
 			"flag": ["qq", "腾讯", "qiyi", "爱奇艺", "奇艺", "youku", "优酷", "mgtv", "芒果", "letv", "乐视", "pptv", "PPTV", "sohu", "bilibili", "哔哩哔哩", "哔哩"],"header":{"User-Agent":"okhttp/4.1.0"}
 		}   
 	}, {
 		"name": "xmflv",
 		"type": 0,
-		"url": "http://pan.qiaoji8.com/tvbox/neibu.php?url=",
+		"url": "https://jx.xmflv.com/?url=",
 		"ext": {
 			"flag": ["qq", "腾讯", "qiyi", "爱奇艺", "奇艺", "youku", "优酷", "mgtv", "芒果", "letv", "乐视", "pptv", "PPTV", "sohu", "bilibili", "哔哩哔哩", "哔哩"]
 		}  
