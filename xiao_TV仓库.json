@@ -2,7 +2,11 @@
   "urls": [
     {
       "url": "https://gitlab.com/xiaozp08/xiaoTV/-/raw/main/%E8%B8%8F%E9%9B%AA%E6%97%A0%E7%97%95.json?ref_type=heads",
-      "name": "🌈xiao TV〔多条线路〕"
+      "name": "🌈xiao TV〔美国线路〕"
+    }
+    {
+      "url": "https://6372.kstore.space/xiaoTV/踏雪无痕.json",
+      "name": "🌈xiao TV〔国内线路〕"
     }
   ]
 }
